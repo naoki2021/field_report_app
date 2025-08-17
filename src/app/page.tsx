@@ -1,103 +1,180 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  // --- State Hooks ---
+  const [corporation, setCorporation] = useState("");
+  const [address, setAddress] = useState(""); // Add address state
+  const [surveyor, setSurveyor] = useState("");
+  const [selectedDocumentType, setSelectedDocumentType] = useState("");
+  const [surveySubType, setSurveySubType] = useState(""); // For FTTH, etc.
+  const [surveyDate, setSurveyDate] = useState("");
+
+  // --- Effects ---
+  // Initialize form fields from URL parameters on component mount
+  useEffect(() => {
+    const corporationParam = searchParams?.get('corporation');
+    const addressParam = searchParams?.get('address'); // Get address
+    const documentTypeParam = searchParams?.get('documentType');
+    const surveySubTypeParam = searchParams?.get('surveySubType');
+    const surveyDateParam = searchParams?.get('surveyDate');
+    const surveyorParam = searchParams?.get('surveyor');
+
+    if (corporationParam) setCorporation(corporationParam);
+    if (addressParam) setAddress(addressParam); // Set address
+    if (documentTypeParam) setSelectedDocumentType(documentTypeParam);
+    if (surveySubTypeParam) setSurveySubType(surveySubTypeParam);
+    if (surveyDateParam) setSurveyDate(surveyDateParam);
+    if (surveyorParam) setSurveyor(surveyorParam);
+
+  }, [searchParams]);
+
+  // --- Handlers ---
+  const handleNextClick = () => {
+    const params = new URLSearchParams();
+    params.set("corporation", corporation);
+    params.set("address", address); // Add address
+    params.set("documentType", selectedDocumentType);
+    if (selectedDocumentType === 'survey_report') {
+        params.set("surveySubType", surveySubType);
+    }
+    params.set("surveyDate", surveyDate);
+    params.set("surveyor", surveyor);
+    router.push(`/upload?${params.toString()}`);
+  };
+
+  // --- Render ---
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <Card className="w-[450px]">
+        <CardHeader>
+          <CardTitle>調査情報を入力</CardTitle>
+          <CardDescription>
+            法人ID/物件名、ドキュメント種別、調査日、調査員名を入力してください。
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <div className="grid w-full items-center gap-4">
+              {/* Corporation Input */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="corporation">法人ID/物件名</Label>
+                <Input
+                  id="corporation"
+                  placeholder="法人IDまたは物件名を入力"
+                  value={corporation}
+                  onChange={(e) => setCorporation(e.target.value)}
+                />
+              </div>
+
+              {/* Address Input */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="address">
+                  住所 <span className="text-xs text-gray-500">（空欄でも可）</span>
+                </Label>
+                <Input
+                  id="address"
+                  placeholder="住所を入力"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+
+              {/* Document Type Select */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="documentType">ドキュメント種別</Label>
+                <Select 
+                  key={`doc-type-${selectedDocumentType}`}
+                  onValueChange={(value) => {
+                    setSelectedDocumentType(value);
+                    setSurveySubType(""); // Reset sub-type when main type changes
+                  }}
+                  value={selectedDocumentType || ""}
+                >
+                  <SelectTrigger id="documentType">
+                    <SelectValue placeholder="選択してください" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="completion_drawings">竣工図書</SelectItem>
+                    <SelectItem value="survey_report">調査報告資料</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Survey Sub Type Select (Conditional) */}
+              {selectedDocumentType === 'survey_report' && (
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="surveySubType">調査種別</Label>
+                  <Select 
+                    key={`sub-type-${surveySubType}`}
+                    onValueChange={setSurveySubType} 
+                    value={surveySubType || ""}
+                  >
+                    <SelectTrigger id="surveySubType">
+                      <SelectValue placeholder="調査種別を選択" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="FTTH">FTTH</SelectItem>
+                      <SelectItem value="introduction">導入</SelectItem>
+                      <SelectItem value="migration">マイグレ</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              {/* Survey Date Input */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="surveyDate">調査日</Label>
+                <Input
+                  id="surveyDate"
+                  type="date"
+                  value={surveyDate}
+                  onChange={(e) => setSurveyDate(e.target.value)}
+                />
+              </div>
+
+              {/* Surveyor Input */}
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="surveyor">調査員名</Label>
+                <Input
+                  id="surveyor"
+                  placeholder="調査員名を入力"
+                  value={surveyor}
+                  onChange={(e) => setSurveyor(e.target.value)}
+                />
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="flex justify-end">
+          <Button onClick={handleNextClick}>
+            写真アップロードへ
+          </Button>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
