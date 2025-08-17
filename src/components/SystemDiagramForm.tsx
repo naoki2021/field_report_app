@@ -31,6 +31,7 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ onSymbolsChange, 
         if (response.ok) {
           const data: SystemDiagramSymbols = await response.json();
           setAvailableSymbols(data);
+          console.log('Available Symbols fetched:', data); // Added log
         } else {
           console.error('Failed to fetch system diagram symbols:', response.statusText);
         }
@@ -44,15 +45,18 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ onSymbolsChange, 
 
   useEffect(() => {
     setSelectedSymbols([]);
+    console.log('resetKey changed, selectedSymbols reset.'); // Added log
   }, [resetKey]);
 
   const handleSymbolChange = (symbol: string, checked: boolean) => {
+    console.log('handleSymbolChange called for symbol:', symbol, 'checked:', checked); // Added log
     const newSelectedSymbols = checked
       ? [...selectedSymbols, symbol]
       : selectedSymbols.filter((s) => s !== symbol);
 
     setSelectedSymbols(newSelectedSymbols);
     onSymbolsChange(newSelectedSymbols);
+    console.log('New selectedSymbols:', newSelectedSymbols); // Added log
   };
 
   return (
@@ -81,12 +85,13 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ onSymbolsChange, 
           <div className="flex flex-wrap gap-4 p-2 border rounded-md bg-muted/50">
             {selectedSymbols.map((symbol) => {
               const symbolData = availableSymbols[symbol];
+              console.log('Rendering symbol:', symbol, 'symbolData:', symbolData); // Added log
               if (!symbolData) return null;
               return (
                 <div key={symbol} className="flex flex-col items-center gap-1">
                   <div className="relative w-12 h-12">
                     <Image
-                      src={symbolData.image_path}
+                      src={symbolData[0].image_path.replace('public/', '/')}
                       alt={symbol}
                       layout="fill"
                       objectFit="contain"

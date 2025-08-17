@@ -234,46 +234,49 @@ function UploadPageContent() {
     }
   };
 
+  const [isGenerating, setIsGenerating] = useState(false);
+
   const handleGenerateReport = async () => {
-    const response = await fetch('/api/generate-report', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        corporation: corporation,
-        address: address,
-        documentType: documentType,
-        surveySubType: surveySubType,
-        surveyDate: surveyDate,
-        surveyor: surveyor,
-        // selectedDiagramSymbols is no longer sent from here
-      }),
-    });
+    setIsGenerating(true);
+    try {
+      const response = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          corporation: corporation,
+          address: address,
+          documentType: documentType,
+          surveySubType: surveySubType,
+          surveyDate: surveyDate,
+          surveyor: surveyor,
+        }),
+      });
 
-    if (response.ok) {
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
+      if (response.ok) {
+        const data = await response.json();
+        const { downloadUrl, fileName } = data;
 
-      const disposition = response.headers.get('Content-Disposition');
-      let filename = 'report.xlsx';
-      if (disposition) {
-        const match = disposition.match(/filename\*?=['"]?(?:UTF-8'')?([^;"'\n]*)/i);
-        if (match && match[1]) {
-          filename = decodeURIComponent(match[1]);
-        }
+        // Create a temporary link to trigger the download
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = fileName; // Suggest a filename to the browser
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        alert('レポートの生成リクエストが完了しました。ダウンロードを開始します。');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to generate report:', errorData);
+        alert(`レポートの生成に失敗しました: ${errorData.message}`);
       }
-      a.download = filename;
-
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-      alert('レポートの生成が完了しました。');
-    } else {
-      alert('レポートの生成に失敗しました。');
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
+      alert('レポートの生成中に予期せぬエラーが発生しました。');
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -371,7 +374,9 @@ function UploadPageContent() {
 
         <div className="mt-8 flex justify-between">
             <Button onClick={handleGoHome} variant="outline">ホームに戻る</Button>
-            <Button onClick={handleGenerateReport}>レポート生成</Button>
+            <Button onClick={handleGenerateReport} disabled={isGenerating}>
+              {isGenerating ? '生成中...' : 'レポート生成'}
+            </Button>
         </div>
       </div>
     </div>
