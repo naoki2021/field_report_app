@@ -394,17 +394,17 @@
         "height": 50
       }
     ],
-    "コンテント": [
+    "コンセント": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "templates/symbols/コンテント.png",
+        "image_path": "templates/symbols/コンセント.png",
         "cell": "C105",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "templates/symbols/コンテント.png",
+        "image_path": "templates/symbols/コンセント.png",
         "cell": "C105",
         "width": 50,
         "height": 50
