@@ -25,38 +25,26 @@ export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // --- State Hooks ---
   const [corporation, setCorporation] = useState("");
-  const [address, setAddress] = useState(""); // Add address state
+  const [address, setAddress] = useState("");
   const [surveyor, setSurveyor] = useState("");
   const [selectedDocumentType, setSelectedDocumentType] = useState("");
-  const [surveySubType, setSurveySubType] = useState(""); // For FTTH, etc.
-  const [surveyDate, setSurveyDate] = useState("");
+  const [surveySubType, setSurveySubType] = useState("");
+  const [surveyDate, setSurveyDate] = useState(new Date().toISOString().split('T')[0]);
 
-  // --- Effects ---
-  // Initialize form fields from URL parameters on component mount
   useEffect(() => {
-    const corporationParam = searchParams?.get('corporation');
-    const addressParam = searchParams?.get('address'); // Get address
-    const documentTypeParam = searchParams?.get('documentType');
-    const surveySubTypeParam = searchParams?.get('surveySubType');
-    const surveyDateParam = searchParams?.get('surveyDate');
-    const surveyorParam = searchParams?.get('surveyor');
-
-    if (corporationParam) setCorporation(corporationParam);
-    if (addressParam) setAddress(addressParam); // Set address
-    if (documentTypeParam) setSelectedDocumentType(documentTypeParam);
-    if (surveySubTypeParam) setSurveySubType(surveySubTypeParam);
-    if (surveyDateParam) setSurveyDate(surveyDateParam);
-    if (surveyorParam) setSurveyor(surveyorParam);
-
+    setCorporation(searchParams?.get('corporation') || "");
+    setAddress(searchParams?.get('address') || "");
+    setSelectedDocumentType(searchParams?.get('documentType') || "");
+    setSurveySubType(searchParams?.get('surveySubType') || "");
+    setSurveyDate(searchParams?.get('surveyDate') || new Date().toISOString().split('T')[0]);
+    setSurveyor(searchParams?.get('surveyor') || "");
   }, [searchParams]);
 
-  // --- Handlers ---
   const handleNextClick = () => {
     const params = new URLSearchParams();
     params.set("corporation", corporation);
-    params.set("address", address); // Add address
+    params.set("address", address);
     params.set("documentType", selectedDocumentType);
     if (selectedDocumentType === 'survey_report') {
         params.set("surveySubType", surveySubType);
@@ -66,112 +54,61 @@ export default function Home() {
     router.push(`/upload?${params.toString()}`);
   };
 
-  // --- Render ---
+  const isNextDisabled = !corporation || !selectedDocumentType || !surveyDate || !surveyor || (selectedDocumentType === 'survey_report' && !surveySubType);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <Card className="w-[450px]">
-        <CardHeader>
-          <CardTitle>調査情報を入力</CardTitle>
-          <CardDescription>
-            法人ID/物件名、ドキュメント種別、調査日、調査員名を入力してください。
+    <main className="w-full max-w-3xl space-y-8">
+      <Card className="w-full">
+        <CardHeader className="text-center p-8">
+          <CardTitle className="text-3xl font-bold tracking-tight">Field Report</CardTitle>
+          <CardDescription className="text-muted-foreground pt-2 text-base">
+            調査情報を入力して、レポート作成を開始します。
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              {/* Corporation Input */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="corporation">法人ID/物件名</Label>
-                <Input
-                  id="corporation"
-                  placeholder="法人IDまたは物件名を入力"
-                  value={corporation}
-                  onChange={(e) => setCorporation(e.target.value)}
-                />
-              </div>
-
-              {/* Address Input */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="address">
-                  住所 <span className="text-xs text-gray-500">（空欄でも可）</span>
-                </Label>
-                <Input
-                  id="address"
-                  placeholder="住所を入力"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </div>
-
-              {/* Document Type Select */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="documentType">ドキュメント種別</Label>
-                <Select 
-                  key={`doc-type-${selectedDocumentType}`}
-                  onValueChange={(value) => {
-                    setSelectedDocumentType(value);
-                    setSurveySubType(""); // Reset sub-type when main type changes
-                  }}
-                  value={selectedDocumentType || ""}
-                >
-                  <SelectTrigger id="documentType">
-                    <SelectValue placeholder="選択してください" />
-                  </SelectTrigger>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 p-8">
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="corporation" className="form-label">物件名 / ID</Label>
+              <Input id="corporation" placeholder="例：〇〇ビル" value={corporation} onChange={(e) => setCorporation(e.target.value)} className="form-input"/>
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="address" className="form-label">住所 (任意)</Label>
+              <Input id="address" placeholder="例：東京都〇〇区..." value={address} onChange={(e) => setAddress(e.target.value)} className="form-input"/>
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="documentType" className="form-label">ドキュメント種別</Label>
+              <Select onValueChange={(value) => { setSelectedDocumentType(value); setSurveySubType(""); }} value={selectedDocumentType}>
+                <SelectTrigger id="documentType" className="form-select-trigger"><SelectValue placeholder="選択してください" /></SelectTrigger>
+                <SelectContent position="popper">
+                  <SelectItem value="completion_drawings" className="form-select-item">竣工図書</SelectItem>
+                  <SelectItem value="survey_report" className="form-select-item">調査報告資料</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {selectedDocumentType === 'survey_report' && (
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="surveySubType" className="form-label">調査種別</Label>
+                <Select onValueChange={setSurveySubType} value={surveySubType}>
+                  <SelectTrigger id="surveySubType" className="form-select-trigger"><SelectValue placeholder="選択してください" /></SelectTrigger>
                   <SelectContent position="popper">
-                    <SelectItem value="completion_drawings">竣工図書</SelectItem>
-                    <SelectItem value="survey_report">調査報告資料</SelectItem>
+                    <SelectItem value="FTTH" className="form-select-item">FTTH</SelectItem>
+                    <SelectItem value="introduction" className="form-select-item">導入</SelectItem>
+                    <SelectItem value="migration" className="form-select-item">マイグレ</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-
-              {/* Survey Sub Type Select (Conditional) */}
-              {selectedDocumentType === 'survey_report' && (
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="surveySubType">調査種別</Label>
-                  <Select 
-                    key={`sub-type-${surveySubType}`}
-                    onValueChange={setSurveySubType} 
-                    value={surveySubType || ""}
-                  >
-                    <SelectTrigger id="surveySubType">
-                      <SelectValue placeholder="調査種別を選択" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="FTTH">FTTH</SelectItem>
-                      <SelectItem value="introduction">導入</SelectItem>
-                      <SelectItem value="migration">マイグレ</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-
-              {/* Survey Date Input */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="surveyDate">調査日</Label>
-                <Input
-                  id="surveyDate"
-                  type="date"
-                  value={surveyDate}
-                  onChange={(e) => setSurveyDate(e.target.value)}
-                />
-              </div>
-
-              {/* Surveyor Input */}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="surveyor">調査員名</Label>
-                <Input
-                  id="surveyor"
-                  placeholder="調査員名を入力"
-                  value={surveyor}
-                  onChange={(e) => setSurveyor(e.target.value)}
-                />
-              </div>
+            )}
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="surveyDate" className="form-label">調査日</Label>
+              <Input id="surveyDate" type="date" value={surveyDate} onChange={(e) => setSurveyDate(e.target.value)} className="form-input"/>
             </div>
-          </form>
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="surveyor" className="form-label">調査員名</Label>
+              <Input id="surveyor" placeholder="例：山田 太郎" value={surveyor} onChange={(e) => setSurveyor(e.target.value)} className="form-input"/>
+            </div>
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <Button onClick={handleNextClick}>
-            写真アップロードへ
+        <CardFooter className="p-8">
+          <Button onClick={handleNextClick} disabled={isNextDisabled} className="w-full text-lg py-7">
+            次へ進む
           </Button>
         </CardFooter>
       </Card>
