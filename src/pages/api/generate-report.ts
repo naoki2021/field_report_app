@@ -29,17 +29,24 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("\n--- RUNNING LATEST VERSION OF GENERATE-REPORT (v3) ---"); // Diagnostic Log
-
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
   try {
-    console.log("Request body:", req.body);
-    const { corporation, address, documentType, surveySubType, surveyDate, surveyor } = req.body;
+    console.log("\n--- [generate-report API v8] ---");
+    console.log("Received request body:", JSON.stringify(req.body, null, 2));
+
+    const { corporation, address, documentType, surveyDate, surveyor } = req.body;
+    let { surveySubType } = req.body;
+
+    if (documentType === 'survey_report' && !surveySubType) {
+      console.log("[DEBUG] surveySubType is missing for survey_report, defaulting to 'FTTH'");
+      surveySubType = 'FTTH';
+    }
 
     if (!corporation || !documentType || !surveyDate || !surveyor) {
+      console.error("[ERROR] Missing required parameters.");
       return res.status(400).json({ message: 'Missing required parameters' });
     }
 
@@ -59,29 +66,49 @@ export default async function handler(
         'migration': `マイグレーション調査報告資料.xlsx`,
       };
       templateFileName = subTypeToTemplate[surveySubType as string];
+      if (!templateFileName) {
+         console.error(`[ERROR] Invalid surveySubType '${surveySubType}' for documentType 'survey_report'.`);
+         return res.status(400).json({ message: `Invalid surveySubType '${surveySubType}'` });
+      }
       templateMappingKey = `survey_report_${surveySubType}`;
       displayDocumentType = '調査報告資料';
     }
 
+    console.log(`[DEBUG] Determined template file: ${templateFileName}`);
+    console.log(`[DEBUG] Determined mapping key: ${templateMappingKey}`);
+
     if (!templateFileName) {
+      console.error("[ERROR] Could not determine template file.");
       return res.status(400).json({ message: 'Could not determine template file.' });
     }
     const templatePath = path.join(process.cwd(), 'templates', templateFileName);
+    console.log(`[DEBUG] Template path: ${templatePath}`);
+
     if (!fs.existsSync(templatePath)) {
+      console.error(`[ERROR] Template file not found at path: ${templatePath}`);
       return res.status(404).json({ message: `Template file not found: ${templateFileName}` });
     }
 
     // --- Workbook Creation and Data Population ---
+    console.log("[DEBUG] Reading workbook...");
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(templatePath);
+    console.log("[DEBUG] Workbook read successfully.");
 
     const writeToCells = (cellType: string, value: any) => {
       const cells = mappingData.report_data_cells[cellType];
       if (cells) {
+        console.log(`[DEBUG] Writing '${value}' to cells for type '${cellType}'`);
         for (const cellInfo of cells) {
           const sheet = workbook.getWorksheet(cellInfo.sheet);
-          if (sheet && value) sheet.getCell(cellInfo.cell).value = value;
+          if (sheet && value !== undefined && value !== null) {
+            sheet.getCell(cellInfo.cell).value = value;
+          } else if (!sheet) {
+            console.warn(`[WARN] Worksheet '${cellInfo.sheet}' not found for cell type '${cellType}'.`);
+          }
         }
+      } else {
+        console.warn(`[WARN] No cell mapping found for type '${cellType}'.`);
       }
     };
 
@@ -94,7 +121,29 @@ export default async function handler(
       writeToCells('surveySubType', surveySubType);
     }
 
+    // --- Write custom title to photo sheets ---
+    const titleText = `${corporation}　光配線写真`;
+    const sheetsToUpdateWithTitle = [
+      '光配線写真①',
+      '光配線写真②',
+      '光配線写真③',
+      '専有部調査写真'
+    ];
+
+    for (const sheetName of sheetsToUpdateWithTitle) {
+      const worksheet = workbook.getWorksheet(sheetName);
+      if (worksheet) {
+        worksheet.getCell('B2').value = titleText;
+        worksheet.getCell('G2').value = titleText;
+        console.log(`[DEBUG] Wrote title '${titleText}' to ${sheetName}`);
+      } else {
+        console.warn(`[WARN] Worksheet '${sheetName}' not found for title writing.`);
+      }
+    }
+
+
     // --- Fetch Photos from Firestore ---
+    console.log("[DEBUG] Fetching photos from Firestore...");
     const photosRef = db.collection('photos');
     const q = photosRef
       .where('corporation', '==', corporation)
@@ -104,50 +153,55 @@ export default async function handler(
       .where('surveyor', '==', surveyor);
     const querySnapshot = await q.get();
     const photosData = querySnapshot.docs.map(doc => doc.data());
-    console.log("Photos fetched. Number of docs:", querySnapshot.docs.length);
+    console.log(`[DEBUG] Fetched ${querySnapshot.docs.length} photos.`);
 
     // --- Image and Symbol Insertion Logic ---
     const templateMappings = mappingData[templateMappingKey]?.mappings;
-    if (templateMappings) {
-      for (const photo of photosData) {
-        const { tag, imageUrl, transcription } = photo;
-        const mappingsForTag = templateMappings[tag];
-        if (mappingsForTag) {
-          const mappingArray = Array.isArray(mappingsForTag) ? mappingsForTag : [mappingsForTag];
-          for (const mapping of mappingArray) {
-            const { sheet: sheetName, image, memo } = mapping;
-            const worksheet = workbook.getWorksheet(sheetName);
-            if (worksheet) {
-              if (imageUrl && image?.cell && image?.width && image?.height) {
-                console.log(`Attempting to insert image for tag: ${tag}`);
-                try {
-                  const response = await fetch(imageUrl);
-                  if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
-                  const imageArrayBuffer = await response.arrayBuffer();
-                  const contentType = response.headers.get('content-type');
-                  const extension = (contentType?.split('/')[1] || 'jpeg') as 'jpeg' | 'png' | 'gif';
-                  const imageId = workbook.addImage({ buffer: imageArrayBuffer, extension });
-                  worksheet.addImage(imageId, {
-                    tl: { col: worksheet.getCell(image.cell).col - 1, row: worksheet.getCell(image.cell).row - 1 },
-                    ext: { width: image.width, height: image.height },
-                  });
-                   console.log(`Successfully inserted image for tag: ${tag}`);
-                } catch (e) { console.error(`Failed to insert image for ${tag}:`, e); }
-              }
-              if (transcription && memo?.cell) {
-                worksheet.getCell(memo.cell).value = transcription;
+    if (!templateMappings) {
+        console.warn(`[WARN] No 'mappings' found in mapping.json for key '${templateMappingKey}'`);
+    } else {
+        console.log(`[DEBUG] Found mappings for key '${templateMappingKey}'. Processing ${photosData.length} photos...`);
+        for (const photo of photosData) {
+            const { tag, imageUrl, transcription } = photo;
+            const mappingsForTag = templateMappings[tag];
+            if (mappingsForTag) {
+              const mappingArray = Array.isArray(mappingsForTag) ? mappingsForTag : [mappingsForTag];
+              for (const mapping of mappingArray) {
+                const { sheet: sheetName, image, memo } = mapping;
+                const worksheet = workbook.getWorksheet(sheetName);
+                if (worksheet) {
+                  if (imageUrl && image?.cell && image?.width && image?.height) {
+                    console.log(`[DEBUG] Attempting to insert image for tag: ${tag} with original dimensions`);
+                    try {
+                      const response = await fetch(imageUrl);
+                      if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+                      const imageArrayBuffer = await response.arrayBuffer();
+                      const contentType = response.headers.get('content-type');
+                      const extension = (contentType?.split('/')[1] || 'jpeg') as 'jpeg' | 'png' | 'gif';
+                      const imageId = workbook.addImage({ buffer: imageArrayBuffer, extension });
+                      worksheet.addImage(imageId, {
+                        tl: { col: worksheet.getCell(image.cell).col - 1, row: worksheet.getCell(image.cell).row - 1 },
+                        ext: { width: image.width, height: image.height },
+                      });
+                       console.log(`[DEBUG] Successfully inserted image for tag: ${tag}`);
+                    } catch (e) { console.error(`[ERROR] Failed to insert image for ${tag}:`, e); }
+                  }
+                  if (transcription && memo?.cell) {
+                    worksheet.getCell(memo.cell).value = transcription;
+                  }
+                }
               }
             }
-          }
         }
-      }
     }
 
     const allSymbols = photosData.flatMap(photo => photo.diagramSymbols || []);
     const tagsToInsert = [...new Set(allSymbols)];
     const systemDiagramMappings = mappingData.system_diagram_symbols;
-    if (systemDiagramMappings && tagsToInsert.length > 0) {
-        console.log('Attempting to insert system diagram symbols:', tagsToInsert);
+    if (!systemDiagramMappings) {
+        console.warn(`[WARN] No 'system_diagram_symbols' found in mapping.json.`);
+    } else if (tagsToInsert.length > 0) {
+        console.log(`[DEBUG] Found system_diagram_symbols. Processing ${tagsToInsert.length} unique symbols...`);
         for (const tag of tagsToInsert) {
             const symbolMappings = systemDiagramMappings[tag];
             if (symbolMappings) {
@@ -157,7 +211,7 @@ export default async function handler(
                     const worksheet = workbook.getWorksheet(sheetName);
                     const fullImagePath = path.join(process.cwd(), image_path);
                     if (worksheet && fs.existsSync(fullImagePath)) {
-                        console.log(`Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
+                        console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
                         try {
                             const imageBuffer = fs.readFileSync(fullImagePath);
                             const extension = path.extname(image_path).substring(1) as 'jpeg' | 'png' | 'gif';
@@ -166,8 +220,8 @@ export default async function handler(
                                 tl: { col: worksheet.getCell(cell).col - 1, row: worksheet.getCell(cell).row - 1 },
                                 ext: { width, height },
                             });
-                            console.log(`Successfully inserted symbol: ${tag}`);
-                        } catch (e) { console.error(`Failed to insert symbol ${tag}:`, e); }
+                            console.log(`[DEBUG] Successfully inserted symbol: ${tag}`);
+                        } catch (e) { console.error(`[ERROR] Failed to insert symbol ${tag}:`, e); }
                     }
                 }
             }
@@ -175,7 +229,9 @@ export default async function handler(
     }
 
     // --- Upload to Firebase Storage ---
+    console.log("[DEBUG] Writing final workbook to buffer...");
     const buffer = await workbook.xlsx.writeBuffer();
+    console.log("[DEBUG] Workbook buffer created. Uploading to Firebase Storage...");
     const outputFileName = `${corporation}_${displayDocumentType}_${new Date().toISOString()}.xlsx`;
     const filePath = `reports/${outputFileName}`;
     const file = bucket.file(filePath);
@@ -185,10 +241,10 @@ export default async function handler(
         metadata: { firebaseStorageDownloadTokens: uuidv4() },
       },
     });
-    console.log(`File uploaded to ${filePath}`);
+    console.log(`[DEBUG] Upload to Firebase Storage successful: ${filePath}`);
 
     const [url] = await file.getSignedUrl({ action: 'read', expires: '03-09-2491' });
-    console.log(`Generated download URL: ${url}`);
+    console.log(`[DEBUG] Generated signed URL.`);
 
     res.status(200).json({
       message: 'Report generated successfully!',
@@ -197,7 +253,7 @@ export default async function handler(
     });
 
   } catch (error: any) {
-    console.error('Error generating report:', error);
-    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    console.error('[FATAL ERROR] An unexpected error occurred in generate-report API:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message, stack: error.stack });
   }
 }

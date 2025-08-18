@@ -16,13 +16,12 @@ interface SystemDiagramSymbols {
 }
 
 interface SystemDiagramFormProps {
+  selectedSymbols: string[];
   onSymbolsChange: (symbols: string[]) => void;
-  resetKey: number;
 }
 
-const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ onSymbolsChange, resetKey }) => {
+const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ selectedSymbols, onSymbolsChange }) => {
   const [availableSymbols, setAvailableSymbols] = useState<SystemDiagramSymbols>({});
-  const [selectedSymbols, setSelectedSymbols] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchSymbols = async () => {
@@ -31,7 +30,6 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ onSymbolsChange, 
         if (response.ok) {
           const data: SystemDiagramSymbols = await response.json();
           setAvailableSymbols(data);
-          console.log('Available Symbols fetched:', data); // Added log
         } else {
           console.error('Failed to fetch system diagram symbols:', response.statusText);
         }
@@ -43,20 +41,11 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ onSymbolsChange, 
     fetchSymbols();
   }, []);
 
-  useEffect(() => {
-    setSelectedSymbols([]);
-    console.log('resetKey changed, selectedSymbols reset.'); // Added log
-  }, [resetKey]);
-
   const handleSymbolChange = (symbol: string, checked: boolean) => {
-    console.log('handleSymbolChange called for symbol:', symbol, 'checked:', checked); // Added log
     const newSelectedSymbols = checked
       ? [...selectedSymbols, symbol]
       : selectedSymbols.filter((s) => s !== symbol);
-
-    setSelectedSymbols(newSelectedSymbols);
     onSymbolsChange(newSelectedSymbols);
-    console.log('New selectedSymbols:', newSelectedSymbols); // Added log
   };
 
   return (

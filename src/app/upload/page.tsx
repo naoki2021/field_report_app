@@ -30,8 +30,7 @@ function UploadPageContent() {
   const [isUploading, setIsUploading] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [uploadedTags, setUploadedTags] = useState<Set<string>>(new Set());
-  const [formKey, setFormKey] = useState(0);
-  const [symbolsForCurrentPhoto, setSymbolsForCurrentPhoto] = useState<string[]>([]);
+  const [selectedSymbols, setSelectedSymbols] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -56,7 +55,7 @@ function UploadPageContent() {
       } catch (error) { console.error('Failed to fetch uploaded photos:', error); }
     };
     fetchInitialData();
-  }, [corporation, documentType, surveySubType, surveyDate, surveyor, formKey]);
+  }, [corporation, documentType, surveySubType, surveyDate, surveyor, isUploading]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -83,16 +82,20 @@ function UploadPageContent() {
       await addDoc(collection(db, "photos"), {
         imageUrl: cloudinaryImageData.secure_url,
         tag: selectedTag,
-        diagramSymbols: symbolsForCurrentPhoto,
+        diagramSymbols: selectedSymbols,
         corporation, documentType, surveySubType, surveyDate, surveyor,
         createdAt: Timestamp.now(),
       });
       alert('アップロードが完了しました。');
+      
+      // Reset only photo-specific state
       setSelectedFile(null);
       setSelectedTag("");
       setPreview(null);
-      setSymbolsForCurrentPhoto([]);
-      setFormKey(prev => prev + 1);
+      
+      // Update uploaded tags without a full re-fetch
+      setUploadedTags(prev => new Set(prev).add(selectedTag));
+
     } catch (error) {
       console.error("Upload failed", error);
       alert('アップロードに失敗しました。');
@@ -131,7 +134,7 @@ function UploadPageContent() {
   const handleGoHome = () => router.push(`/?${searchParams.toString()}`);
 
   return (
-    <main className="container">
+    <main className="w-full max-w-3xl mx-auto py-8 space-y-8">
       <Card>
         <CardHeader className="p-8">
           <CardTitle className="text-2xl">調査情報</CardTitle>
@@ -191,7 +194,7 @@ function UploadPageContent() {
           <CardDescription className="text-muted-foreground text-base pt-1">この調査で使用する全ての系統図記号を選択してください。</CardDescription>
         </CardHeader>
         <CardContent className="p-8">
-          <SystemDiagramForm onSymbolsChange={setSymbolsForCurrentPhoto} resetKey={formKey} />
+          <SystemDiagramForm selectedSymbols={selectedSymbols} onSymbolsChange={setSelectedSymbols} />
         </CardContent>
       </Card>
 
