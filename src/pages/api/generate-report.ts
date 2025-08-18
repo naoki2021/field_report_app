@@ -179,8 +179,9 @@ export default async function handler(
                       const contentType = response.headers.get('content-type');
                       const extension = (contentType?.split('/')[1] || 'jpeg') as 'jpeg' | 'png' | 'gif';
                       const imageId = workbook.addImage({ buffer: imageArrayBuffer, extension });
+                      const startCell = worksheet.getCell(image.cell);
                       worksheet.addImage(imageId, {
-                        tl: { col: worksheet.getCell(image.cell).col - 1, row: worksheet.getCell(image.cell).row - 1 },
+                        tl: { col: startCell.col! - 1, row: startCell.row! - 1 },
                         ext: { width: image.width, height: image.height },
                       });
                        console.log(`[DEBUG] Successfully inserted image for tag: ${tag}`);
