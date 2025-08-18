@@ -95,7 +95,7 @@ export default async function handler(
     await workbook.xlsx.readFile(templatePath);
     console.log("[DEBUG] Workbook read successfully.");
 
-    const writeToCells = (cellType: string, value: any) => {
+    const writeToCells = (cellType: string, value: string | number | null | undefined) => {
       const cells = mappingData.report_data_cells[cellType];
       if (cells) {
         console.log(`[DEBUG] Writing '${value}' to cells for type '${cellType}'`);
@@ -252,8 +252,10 @@ export default async function handler(
       fileName: outputFileName
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('[FATAL ERROR] An unexpected error occurred in generate-report API:', error);
-    res.status(500).json({ message: 'Internal Server Error', error: error.message, stack: error.stack });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    res.status(500).json({ message: 'Internal Server Error', error: errorMessage, stack: errorStack });
   }
 }

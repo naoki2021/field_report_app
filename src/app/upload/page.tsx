@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from '@/lib/firebase';
 import { collection, addDoc, Timestamp, query, where, getDocs } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
 import SystemDiagramForm from '@/components/SystemDiagramForm';
 
 function UploadPageContent() {
@@ -122,9 +121,10 @@ function UploadPageContent() {
         document.body.removeChild(a);
         alert('レポートの生成が完了しました。');
       } else {
-        alert(`レポートの生成に失敗しました: ${(await response.json()).message}`);
+        const errorData = await response.json();
+        alert(`レポートの生成に失敗しました: ${errorData.message}`);
       }
-    } catch (error) {
+    } catch {
       alert('レポートの生成中にエラーが発生しました。');
     } finally {
       setIsGenerating(false);
