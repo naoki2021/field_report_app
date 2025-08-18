@@ -131,7 +131,10 @@ function UploadPageContent() {
     }
   };
 
-  const handleGoHome = () => router.push(`/?${searchParams.toString()}`);
+  const handleGoHome = () => {
+    const params = searchParams ? `?${searchParams.toString()}` : '';
+    router.push(`/${params}`);
+  };
 
   return (
     <main className="w-full max-w-3xl mx-auto py-8 space-y-8">
