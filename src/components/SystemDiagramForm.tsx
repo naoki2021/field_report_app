@@ -12,7 +12,7 @@ interface SymbolMapping {
 }
 
 interface SystemDiagramSymbols {
-  [key: string]: SymbolMapping;
+  [key: string]: SymbolMapping[]; // <--- Changed to array
 }
 
 interface SystemDiagramFormProps {
@@ -44,7 +44,7 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ selectedSymbols, 
   const handleSymbolChange = (symbol: string, checked: boolean) => {
     const newSelectedSymbols = checked
       ? [...selectedSymbols, symbol]
-      : selectedSymbols.filter((s) => s !== symbol);
+            : selectedSymbols.filter((s) => s !== symbol);
     onSymbolsChange(newSelectedSymbols);
   };
 
@@ -73,14 +73,14 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ selectedSymbols, 
           <h4 className="text-md font-semibold mb-2">選択中の記号:</h4>
           <div className="flex flex-wrap gap-4 p-2 border rounded-md bg-muted/50">
             {selectedSymbols.map((symbol) => {
-              const symbolData = availableSymbols[symbol];
-              console.log('Rendering symbol:', symbol, 'symbolData:', symbolData); // Added log
-              if (!symbolData) return null;
+              const symbolDataArray = availableSymbols[symbol];
+              if (!symbolDataArray || symbolDataArray.length === 0) return null;
+              const firstSymbol = symbolDataArray[0]; // Use the first symbol for preview
               return (
                 <div key={symbol} className="flex flex-col items-center gap-1">
                   <div className="relative w-12 h-12">
                     <Image
-                      src={symbolData[0].image_path.replace('public/', '/')}
+                      src={firstSymbol.image_path.replace('public/', '/')}
                       alt={symbol}
                       layout="fill"
                       objectFit="contain"
