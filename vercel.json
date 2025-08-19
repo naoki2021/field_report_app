@@ -1,6 +1,6 @@
 {
   "functions": {
-    "src/pages/api/generate-report.ts": {
+    "src/pages/api/**/*.ts": {
       "includeFiles": "symbols/**"
     }
   }
