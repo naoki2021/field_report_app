@@ -37,7 +37,7 @@ export default async function handler(
     console.log("\n--- [generate-report API v8] ---");
     console.log("Received request body:", JSON.stringify(req.body, null, 2));
 
-    const { corporation, address, documentType, surveyDate, surveyor } = req.body;
+    const { corporation, address, documentType, surveyDate, surveyor, diagramSymbols } = req.body;
     let { surveySubType } = req.body;
 
     if (documentType === 'survey_report' && !surveySubType) {
@@ -195,8 +195,7 @@ export default async function handler(
         }
     }
 
-    const allSymbols = photosData.flatMap(photo => photo.diagramSymbols || []);
-    const tagsToInsert = [...new Set(allSymbols)];
+    const tagsToInsert = [...new Set(diagramSymbols || [])];
     const systemDiagramMappings = mappingData.system_diagram_symbols;
     if (!systemDiagramMappings) {
         console.warn(`[WARN] No 'system_diagram_symbols' found in mapping.json.`);

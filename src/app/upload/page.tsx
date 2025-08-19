@@ -81,7 +81,6 @@ function UploadPageContent() {
       await addDoc(collection(db, "photos"), {
         imageUrl: cloudinaryImageData.secure_url,
         tag: selectedTag,
-        diagramSymbols: selectedSymbols,
         corporation, documentType, surveySubType, surveyDate, surveyor,
         createdAt: Timestamp.now(),
       });
@@ -109,7 +108,7 @@ function UploadPageContent() {
       const response = await fetch('/api/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ corporation, address, documentType, surveySubType, surveyDate, surveyor }),
+        body: JSON.stringify({ corporation, address, documentType, surveySubType, surveyDate, surveyor, diagramSymbols: selectedSymbols }),
       });
       if (response.ok) {
         const data = await response.json();
