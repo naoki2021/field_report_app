@@ -1,14 +1,13 @@
-eimport type { NextConfig } from "next";
+import type { NextConfig } from "next";
 
+// Next.js configuration
 const nextConfig: NextConfig = {
-  / その他の設定オプション
   images: {
     unoptimized: true,
   },
-    eslint: {
+  eslint: {
     ignoreDuringBuilds: true,
   },
-
 };
 
 export default nextConfig;
