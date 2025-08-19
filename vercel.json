@@ -1,7 +1,11 @@
 {
-  "includeFiles": [
-    "symbols/**",
-    "templates/**",
-    "mapping.json"
-  ]
+  "functions": {
+    "src/pages/api/generate-report.ts": {
+      "includeFiles": [
+        "symbols/**",
+        "templates/**",
+        "mapping.json"
+      ]
+    }
+  }
 }
