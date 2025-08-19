@@ -38,6 +38,12 @@ function UploadPageContent() {
   const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   const CLOUDINARY_UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
+  // For debugging symbol selection
+  const handleSymbolsChange = (symbols: string[]) => {
+    console.log('[DEBUG] Symbols selected in form:', symbols);
+    setSelectedSymbols(symbols);
+  };
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -103,12 +109,24 @@ function UploadPageContent() {
   };
 
   const handleGenerateReport = async () => {
+    console.log('[DEBUG] Generating report with symbols:', selectedSymbols);
     setIsGenerating(true);
     try {
+      // Create a clean, new array to ensure proper serialization
+      const symbolsToSend = Array.from(selectedSymbols);
+
       const response = await fetch('/api/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ corporation, address, documentType, surveySubType, surveyDate, surveyor, diagramSymbols: selectedSymbols }),
+        body: JSON.stringify({ 
+          corporation, 
+          address, 
+          documentType, 
+          surveySubType, 
+          surveyDate, 
+          surveyor, 
+          diagramSymbols: symbolsToSend 
+        }),
       });
       if (response.ok) {
         const data = await response.json();
@@ -196,7 +214,7 @@ function UploadPageContent() {
           <CardDescription className="text-muted-foreground text-base pt-1">この調査で使用する全ての系統図記号を選択してください。</CardDescription>
         </CardHeader>
         <CardContent className="p-8">
-          <SystemDiagramForm selectedSymbols={selectedSymbols} onSymbolsChange={setSelectedSymbols} />
+          <SystemDiagramForm selectedSymbols={selectedSymbols} onSymbolsChange={handleSymbolsChange} />
         </CardContent>
       </Card>
 

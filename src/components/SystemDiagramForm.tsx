@@ -21,30 +21,48 @@ interface SystemDiagramFormProps {
 }
 
 const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ selectedSymbols, onSymbolsChange }) => {
-  const [availableSymbols, setAvailableSymbols] = useState<SystemDiagramSymbols>({});
+  const [availableSymbols, setAvailableSymbols] = useState<string[]>([]);
+  const [symbolImagePaths, setSymbolImagePaths] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const fetchSymbols = async () => {
+    const fetchSymbolData = async () => {
       try {
-        const response = await fetch('/api/system-diagram-symbols');
-        if (response.ok) {
-          const data: SystemDiagramSymbols = await response.json();
-          setAvailableSymbols(data);
-        } else {
-          console.error('Failed to fetch system diagram symbols:', response.statusText);
+        // Fetch symbol names (already normalized)
+        const namesResponse = await fetch('/api/system-diagram-names');
+        if (!namesResponse.ok) {
+          throw new Error(`Failed to fetch symbol names: ${namesResponse.statusText}`);
         }
+        const namesData: string[] = await namesResponse.json();
+        setAvailableSymbols(namesData);
+
+        // Fetch symbol details for images
+        const symbolsResponse = await fetch('/api/system-diagram-symbols');
+        if (!symbolsResponse.ok) {
+          throw new Error(`Failed to fetch symbol details: ${symbolsResponse.statusText}`);
+        }
+        const symbolsData: SystemDiagramSymbols = await symbolsResponse.json();
+        
+        const imagePaths: { [key: string]: string } = {};
+        for (const key in symbolsData) {
+          const normalizedKey = key.normalize('NFC');
+          if (symbolsData[key] && symbolsData[key].length > 0) {
+            imagePaths[normalizedKey] = symbolsData[key][0].image_path;
+          }
+        }
+        setSymbolImagePaths(imagePaths);
+
       } catch (error) {
-        console.error('Error fetching system diagram symbols:', error);
+        console.error('Error fetching system diagram data:', error);
       }
     };
 
-    fetchSymbols();
+    fetchSymbolData();
   }, []);
 
   const handleSymbolChange = (symbol: string, checked: boolean) => {
     const newSelectedSymbols = checked
       ? [...selectedSymbols, symbol]
-            : selectedSymbols.filter((s) => s !== symbol);
+      : selectedSymbols.filter((s) => s !== symbol);
     onSymbolsChange(newSelectedSymbols);
   };
 
@@ -52,7 +70,7 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ selectedSymbols, 
     <div className="mt-4 p-4 border rounded-lg shadow-sm">
       
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {Object.keys(availableSymbols).map((tag) => (
+        {availableSymbols.map((tag) => (
           <div key={tag} className="flex items-center space-x-2">
             <Checkbox
               id={tag}
@@ -73,14 +91,13 @@ const SystemDiagramForm: React.FC<SystemDiagramFormProps> = ({ selectedSymbols, 
           <h4 className="text-md font-semibold mb-2">選択中の記号:</h4>
           <div className="flex flex-wrap gap-4 p-2 border rounded-md bg-muted/50">
             {selectedSymbols.map((symbol) => {
-              const symbolDataArray = availableSymbols[symbol];
-              if (!symbolDataArray || symbolDataArray.length === 0) return null;
-              const firstSymbol = symbolDataArray[0]; // Use the first symbol for preview
+              const imagePath = symbolImagePaths[symbol];
+              if (!imagePath) return null;
               return (
                 <div key={symbol} className="flex flex-col items-center gap-1">
                   <div className="relative w-12 h-12">
                     <Image
-                      src={firstSymbol.image_path.replace('public/', '/')}
+                      src={imagePath.replace('public/', '/')}
                       alt={symbol}
                       layout="fill"
                       objectFit="contain"

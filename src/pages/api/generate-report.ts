@@ -148,7 +148,10 @@ export default async function handler(
     const photosRef = db.collection('photos');
     const q = photosRef
       .where('corporation', '==', corporation)
-      .where('surveyDate', '==', surveyDate);
+      .where('documentType', '==', documentType)
+      .where('surveySubType', '==', surveySubType)
+      .where('surveyDate', '==', surveyDate)
+      .where('surveyor', '==', surveyor);
     const querySnapshot = await q.get();
     const photosData = querySnapshot.docs.map(doc => doc.data());
     console.log(`[DEBUG] Fetched ${querySnapshot.docs.length} photos.`);
@@ -203,7 +206,8 @@ export default async function handler(
     } else if (tagsToInsert.length > 0) {
         console.log(`[DEBUG] Found system_diagram_symbols. Processing ${tagsToInsert.length} unique symbols...`);
         for (const tag of tagsToInsert) {
-            const symbolMappings = systemDiagramMappings[tag as string];
+            const normalizedTag = tag.normalize('NFC').trim();
+            const symbolMappings = systemDiagramMappings[normalizedTag as string];
             if (symbolMappings) {
                 const mappingArray = Array.isArray(symbolMappings) ? symbolMappings : [symbolMappings];
                 for (const symbolMapping of mappingArray) {

@@ -13,7 +13,7 @@ export default function handler(
 
     const systemDiagramSymbols = mappingData.system_diagram_symbols;
     if (systemDiagramSymbols) {
-      const symbolNames = Object.keys(systemDiagramSymbols);
+      const symbolNames = Object.keys(systemDiagramSymbols).map(name => name.normalize('NFC'));
       res.status(200).json(symbolNames);
     } else {
       res.status(404).json({ message: 'System diagram symbols not found in mapping.json' });
