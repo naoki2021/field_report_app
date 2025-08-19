@@ -229,32 +229,46 @@ export default async function handler(
             const worksheet = workbook.getWorksheet(sheetName);
             // Resolve the path relative to project root.
             const fullImagePath = path.join(process.cwd(), image_path);
-            if (worksheet && fs.existsSync(fullImagePath)) {
-              console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
-              try {
-                // Read the image as a Buffer and pass it directly to exceljs.
-                    // Read the image as a Buffer. TypeScript may infer a generic Buffer type (e.g. Buffer<ArrayBuffer>)
-                    // which does not satisfy the expected Buffer interface for exceljs. We explicitly type cast to
-                    // `Buffer` and further cast to `any` when passing to addImage to avoid compile-time errors.
-                    const imageBuffer: Buffer = fs.readFileSync(fullImagePath) as unknown as Buffer;
-                    const extension = path.extname(fullImagePath).substring(1) as 'jpeg' | 'png' | 'gif';
-                    // @ts-ignore  // Suppress TS error: ExcelJS expects a Node Buffer; the cast above ensures runtime correctness.
-                    const imageId = workbook.addImage({ buffer: imageBuffer as any, extension });
-                const cellRef = worksheet.getCell(cell);
-                worksheet.addImage(imageId, {
-                  tl: { col: Number(cellRef.col) - 1, row: Number(cellRef.row) - 1 },
-                  ext: { width, height },
-                });
-                console.log(`[DEBUG] Successfully inserted symbol: ${tag}`);
-              } catch (e) {
-                console.error(`[ERROR] Failed to insert symbol ${tag}:`, e);
-              }
-            } else {
-              if (!worksheet) {
-                console.warn(`[WARN] Worksheet '${sheetName}' not found for symbol '${tag}'.`);
+            // If worksheet does not exist, skip this symbol.
+            if (!worksheet) {
+              console.warn(`[WARN] Worksheet '${sheetName}' not found for symbol '${tag}'.`);
+              continue;
+            }
+            console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
+            try {
+              let imageBuffer: Buffer;
+              let extension: 'jpeg' | 'png' | 'gif';
+              if (fs.existsSync(fullImagePath)) {
+                // Use the locally bundled image if available
+                imageBuffer = fs.readFileSync(fullImagePath) as unknown as Buffer;
+                extension = path.extname(fullImagePath).substring(1) as 'jpeg' | 'png' | 'gif';
               } else {
-                console.warn(`[WARN] Image not found for symbol '${tag}' at path: ${fullImagePath}`);
+                // Fallback: fetch from GitHub raw repository under public/symbols
+                const fileNameOnly = path.basename(image_path);
+                // Encode the filename to ensure multibyte characters are URL-safe
+                const encodedFileName = encodeURIComponent(fileNameOnly);
+                const remoteUrl = `https://raw.githubusercontent.com/naoki2021/field_report_app/main/public/symbols/${encodedFileName}`;
+                console.warn(`[WARN] Local symbol image not found at ${fullImagePath}. Falling back to remote URL: ${remoteUrl}`);
+                const resp = await fetch(remoteUrl);
+                if (!resp.ok) throw new Error(`Failed to fetch remote symbol image: ${resp.statusText}`);
+                const arrayBuf = await resp.arrayBuffer();
+                imageBuffer = Buffer.from(new Uint8Array(arrayBuf));
+                // Derive the extension from the remote URL; default to png
+                const extMatch = remoteUrl.match(/\.([^.]+)$/);
+                const ext = extMatch ? extMatch[1] : 'png';
+                extension = ext as 'jpeg' | 'png' | 'gif';
               }
+              // Add image to worksheet
+              // @ts-ignore  // Suppress TS error: ExcelJS expects a Node Buffer; the cast below ensures runtime correctness.
+              const imageId = workbook.addImage({ buffer: imageBuffer as any, extension });
+              const cellRef = worksheet.getCell(cell);
+              worksheet.addImage(imageId, {
+                tl: { col: Number(cellRef.col) - 1, row: Number(cellRef.row) - 1 },
+                ext: { width, height },
+              });
+              console.log(`[DEBUG] Successfully inserted symbol: ${tag}`);
+            } catch (e) {
+              console.error(`[ERROR] Failed to insert symbol ${tag}:`, e);
             }
           }
         }
