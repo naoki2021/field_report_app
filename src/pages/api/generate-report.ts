@@ -182,7 +182,7 @@ export default async function handler(
                       const startCell = worksheet.getCell(image.cell);
 
                       worksheet.addImage(imageId, {
-                        tl: { col: startCell.col! - 1, row: startCell.row! - 1 },
+                        tl: { col: Number(startCell.col!) - 1, row: Number(startCell.row!) - 1 },
                         ext: { width: image.width, height: image.height },
                       });
                       
@@ -217,10 +217,11 @@ export default async function handler(
                         console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
                         try {
                             const imageBuffer = fs.readFileSync(fullImagePath);
+                            const arrayBuffer = imageBuffer.buffer.slice(imageBuffer.byteOffset, imageBuffer.byteOffset + imageBuffer.byteLength);
                             const extension = path.extname(image_path).substring(1) as 'jpeg' | 'png' | 'gif';
-                            const imageId = workbook.addImage({ buffer: imageBuffer, extension });
+                            const imageId = workbook.addImage({ buffer: arrayBuffer, extension });
                             worksheet.addImage(imageId, {
-                                tl: { col: worksheet.getCell(cell).col - 1, row: worksheet.getCell(cell).row - 1 },
+                                tl: { col: Number(worksheet.getCell(cell).col) - 1, row: Number(worksheet.getCell(cell).row) - 1 },
                                 ext: { width, height },
                             });
                             console.log(`[DEBUG] Successfully inserted symbol: ${tag}`);
