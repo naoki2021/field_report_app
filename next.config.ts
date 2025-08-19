@@ -5,12 +5,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Vercelのサーバーレス環境にファイルを含めるための設定
-  experimental: {
-    outputFileTracingIncludes: {
-      '/api/generate-report': ['./symbols/**/*'],
-    },
-  },
 };
 
 export default nextConfig;

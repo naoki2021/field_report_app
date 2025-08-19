@@ -1,0 +1,7 @@
+{
+  "includeFiles": [
+    "symbols/**",
+    "templates/**",
+    "mapping.json"
+  ]
+}
