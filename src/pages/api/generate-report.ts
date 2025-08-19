@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
+// Import Buffer explicitly so TypeScript picks up the correct Node definition.
 import { Buffer } from 'buffer';
 import ExcelJS from 'exceljs';
 import fetch from 'node-fetch';
@@ -177,9 +179,14 @@ export default async function handler(
                   const response = await fetch(imageUrl);
                   if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
                   const imageArrayBuffer = await response.arrayBuffer();
-                  const imageBuffer = Buffer.from(new Uint8Array(imageArrayBuffer));
                   const contentType = response.headers.get('content-type');
+                  // Determine the appropriate extension from the response headers; default to jpeg
                   const extension = (contentType?.split('/')[1] || 'jpeg') as 'jpeg' | 'png' | 'gif';
+                  // Convert the ArrayBuffer into a Uint8Array before creating a Node Buffer. This avoids
+                  // TypeScript inferring a generic type parameter on Buffer which can break compilation.
+                  // Explicitly type the image buffer as Node's Buffer to avoid TypeScript inferring a generic
+                  // Buffer<ArrayBuffer> type. See: https://github.com/exceljs/exceljs/issues/1396
+                  const imageBuffer: Buffer = Buffer.from(new Uint8Array(imageArrayBuffer));
                   const imageId = workbook.addImage({ buffer: imageBuffer, extension });
                   const startCell = worksheet.getCell(image.cell);
                   worksheet.addImage(imageId, {
