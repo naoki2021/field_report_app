@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
+import { Buffer } from 'buffer';
 import ExcelJS from 'exceljs';
 import fetch from 'node-fetch';
 import admin from 'firebase-admin';
@@ -176,9 +177,10 @@ export default async function handler(
                   const response = await fetch(imageUrl);
                   if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
                   const imageArrayBuffer = await response.arrayBuffer();
+                  const imageBuffer = Buffer.from(new Uint8Array(imageArrayBuffer));
                   const contentType = response.headers.get('content-type');
                   const extension = (contentType?.split('/')[1] || 'jpeg') as 'jpeg' | 'png' | 'gif';
-                  const imageId = workbook.addImage({ buffer: Buffer.from(imageArrayBuffer), extension });
+                  const imageId = workbook.addImage({ buffer: imageBuffer, extension });
                   const startCell = worksheet.getCell(image.cell);
                   worksheet.addImage(imageId, {
                     tl: { col: Number(startCell.col) - 1, row: Number(startCell.row) - 1 },
