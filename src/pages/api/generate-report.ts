@@ -203,7 +203,7 @@ export default async function handler(
     } else if (tagsToInsert.length > 0) {
         console.log(`[DEBUG] Found system_diagram_symbols. Processing ${tagsToInsert.length} unique symbols...`);
         for (const tag of tagsToInsert) {
-            const symbolMappings = systemDiagramMappings[tag];
+            const symbolMappings = systemDiagramMappings[tag as string];
             if (symbolMappings) {
                 const mappingArray = Array.isArray(symbolMappings) ? symbolMappings : [symbolMappings];
                 for (const symbolMapping of mappingArray) {
