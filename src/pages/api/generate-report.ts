@@ -214,6 +214,11 @@ export default async function handler(
                     const { sheet: sheetName, image_path, cell, width, height } = symbolMapping;
                     const worksheet = workbook.getWorksheet(sheetName);
                     const fullImagePath = path.join(process.cwd(), image_path);
+                    
+                    // Vercel environment debugging logs
+                    console.log(`[VERCEL_DEBUG] Checking for symbol image at path: ${fullImagePath}`);
+                    console.log(`[VERCEL_DEBUG] Does file exist? ${fs.existsSync(fullImagePath)}`);
+
                     if (worksheet && fs.existsSync(fullImagePath)) {
                         console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
                         try {
