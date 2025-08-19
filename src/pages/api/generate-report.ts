@@ -37,7 +37,8 @@ export default async function handler(
     console.log("\n--- [generate-report API v8] ---");
     console.log("Received request body:", JSON.stringify(req.body, null, 2));
 
-    const { corporation, address, documentType, surveyDate, surveyor, diagramSymbols } = req.body;
+    const { corporation, address, documentType, surveyDate, surveyor } = req.body;
+    const diagramSymbols = req.body.diagramSymbols as string[] | undefined;
     let { surveySubType } = req.body;
 
     if (documentType === 'survey_report' && !surveySubType) {
