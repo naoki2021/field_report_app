@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "src/pages/api/generate-report.ts": {
-      "includeFiles": "symbols/**"
-    }
-  }
-}
