@@ -231,9 +231,12 @@ export default async function handler(
               console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
               try {
                 // Read the image as a Buffer and pass it directly to exceljs.
-                const imageBuffer = fs.readFileSync(fullImagePath);
-                const extension = path.extname(fullImagePath).substring(1) as 'jpeg' | 'png' | 'gif';
-                const imageId = workbook.addImage({ buffer: imageBuffer, extension });
+                    // Read the image as a Buffer. TypeScript may infer a generic Buffer type (e.g. Buffer<ArrayBuffer>)
+                    // which does not satisfy the expected Buffer interface for exceljs. We explicitly type cast to
+                    // `Buffer` and further cast to `any` when passing to addImage to avoid compile-time errors.
+                    const imageBuffer: Buffer = fs.readFileSync(fullImagePath) as unknown as Buffer;
+                    const extension = path.extname(fullImagePath).substring(1) as 'jpeg' | 'png' | 'gif';
+                    const imageId = workbook.addImage({ buffer: imageBuffer as any, extension });
                 const cellRef = worksheet.getCell(cell);
                 worksheet.addImage(imageId, {
                   tl: { col: Number(cellRef.col) - 1, row: Number(cellRef.row) - 1 },
