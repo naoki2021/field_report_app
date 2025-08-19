@@ -43,8 +43,12 @@ export default async function handler(
       console.log(`[VERCEL_DEBUG] Current working directory (process.cwd()): ${rootPath}`);
       const rootContents = fs.readdirSync(rootPath);
       console.log(`[VERCEL_DEBUG] Contents of ${rootPath}:`, rootContents.join(', '));
-    } catch (e: any) {
-      console.error(`[VERCEL_DEBUG] Error listing directories: ${e.message}`);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error(`[VERCEL_DEBUG] Error listing directories: ${e.message}`);
+      } else {
+        console.error(`[VERCEL_DEBUG] An unknown error occurred while listing directories.`);
+      }
     }
     // End of debugging logs
 
