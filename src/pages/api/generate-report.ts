@@ -186,8 +186,11 @@ export default async function handler(
                   // TypeScript inferring a generic type parameter on Buffer which can break compilation.
                   // Explicitly type the image buffer as Node's Buffer to avoid TypeScript inferring a generic
                   // Buffer<ArrayBuffer> type. See: https://github.com/exceljs/exceljs/issues/1396
+                  // Convert the ArrayBuffer into a Node.js Buffer. TypeScript's typing for Buffer.from with a
+                  // Uint8Array infers a generic Buffer<...> which causes compile errors when passed to
+                  // exceljs. To avoid this, we cast the resulting buffer to 'any' when adding the image.
                   const imageBuffer: Buffer = Buffer.from(new Uint8Array(imageArrayBuffer));
-                  const imageId = workbook.addImage({ buffer: imageBuffer, extension });
+                  const imageId = workbook.addImage({ buffer: imageBuffer as any, extension });
                   const startCell = worksheet.getCell(image.cell);
                   worksheet.addImage(imageId, {
                     tl: { col: Number(startCell.col) - 1, row: Number(startCell.row) - 1 },
