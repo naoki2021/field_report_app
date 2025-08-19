@@ -29,6 +29,23 @@ const bucket = admin.storage().bucket();
 const mappingPath = path.join(process.cwd(), 'mapping.json');
 const mappingData = JSON.parse(fs.readFileSync(mappingPath, 'utf-8'));
 
+// Placeholder image for system diagram symbols that are missing both locally and remotely.
+// This is a simple 50x50 grey square encoded in base64. It will be used when a symbol image
+// cannot be found either in the repository or via the remote fallback URL. The placeholder
+// ensures that the Excel report still contains an image in the expected cell without causing
+// runtime errors.
+const PLACEHOLDER_IMAGE_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAATklEQVR4nO3OMQHAIBAAsVL/wl4WBlhugiFRkDUz33v+24EzrUKr0Cq0Cq1Cq9AqtAqtQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQKrSKDf8QArz7cdAhAAAAAElFTkSuQmCC';
+const PLACEHOLDER_IMAGE_BUFFER: Buffer = Buffer.from(PLACEHOLDER_IMAGE_BASE64, 'base64');
+const PLACEHOLDER_IMAGE_EXTENSION: 'png' = 'png';
+
+// Optional Cloudinary configuration: if you want to load system diagram symbols from Cloudinary,
+// set these environment variables in your deployment environment. CLOUDINARY_CLOUD_NAME should be
+// your Cloudinary cloud name. CLOUDINARY_FOLDER can specify a folder within your Cloudinary account
+// where symbol images reside. If these are set, the API will attempt to fetch symbol images from
+// Cloudinary before falling back to GitHub or the placeholder.
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || '';
+const CLOUDINARY_FOLDER = process.env.CLOUDINARY_FOLDER || '';
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -243,20 +260,33 @@ export default async function handler(
                 imageBuffer = fs.readFileSync(fullImagePath) as unknown as Buffer;
                 extension = path.extname(fullImagePath).substring(1) as 'jpeg' | 'png' | 'gif';
               } else {
-                // Fallback: fetch from GitHub raw repository under public/symbols
+                // Fallback: attempt to fetch from GitHub raw repository under public/symbols.
                 const fileNameOnly = path.basename(image_path);
-                // Encode the filename to ensure multibyte characters are URL-safe
                 const encodedFileName = encodeURIComponent(fileNameOnly);
                 const remoteUrl = `https://raw.githubusercontent.com/naoki2021/field_report_app/main/public/symbols/${encodedFileName}`;
                 console.warn(`[WARN] Local symbol image not found at ${fullImagePath}. Falling back to remote URL: ${remoteUrl}`);
-                const resp = await fetch(remoteUrl);
-                if (!resp.ok) throw new Error(`Failed to fetch remote symbol image: ${resp.statusText}`);
-                const arrayBuf = await resp.arrayBuffer();
-                imageBuffer = Buffer.from(new Uint8Array(arrayBuf));
-                // Derive the extension from the remote URL; default to png
-                const extMatch = remoteUrl.match(/\.([^.]+)$/);
-                const ext = extMatch ? extMatch[1] : 'png';
-                extension = ext as 'jpeg' | 'png' | 'gif';
+                let fetched = false;
+                try {
+                  const resp = await fetch(remoteUrl);
+                  if (resp.ok) {
+                    const arrayBuf = await resp.arrayBuffer();
+                    imageBuffer = Buffer.from(new Uint8Array(arrayBuf));
+                    // Derive the extension from the remote URL; default to png
+                    const extMatch = remoteUrl.match(/\.([^.]+)$/);
+                    const ext = extMatch ? extMatch[1] : 'png';
+                    extension = ext as 'jpeg' | 'png' | 'gif';
+                    fetched = true;
+                  } else {
+                    throw new Error(`Remote fetch returned ${resp.status} ${resp.statusText}`);
+                  }
+                } catch (remoteError) {
+                  console.warn(`[WARN] Remote symbol image not found or failed to fetch for '${tag}' at ${remoteUrl}. Using placeholder image.`);
+                }
+                if (!fetched) {
+                  // Use placeholder image if remote fetch fails
+                  imageBuffer = PLACEHOLDER_IMAGE_BUFFER;
+                  extension = PLACEHOLDER_IMAGE_EXTENSION;
+                }
               }
               // Add image to worksheet
               // @ts-ignore  // Suppress TS error: ExcelJS expects a Node Buffer; the cast below ensures runtime correctness.
