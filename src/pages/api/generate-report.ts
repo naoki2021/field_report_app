@@ -180,11 +180,13 @@ export default async function handler(
                       const extension = (contentType?.split('/')[1] || 'jpeg') as 'jpeg' | 'png' | 'gif';
                       const imageId = workbook.addImage({ buffer: imageArrayBuffer, extension });
                       const startCell = worksheet.getCell(image.cell);
+
                       worksheet.addImage(imageId, {
                         tl: { col: startCell.col! - 1, row: startCell.row! - 1 },
                         ext: { width: image.width, height: image.height },
                       });
-                       console.log(`[DEBUG] Successfully inserted image for tag: ${tag}`);
+                      
+                      console.log(`[DEBUG] Successfully inserted image for tag: ${tag}`);
                     } catch (e) { console.error(`[ERROR] Failed to insert image for ${tag}:`, e); }
                   }
                   if (transcription && memo?.cell) {
