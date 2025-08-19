@@ -37,6 +37,17 @@ export default async function handler(
     console.log("\n--- [generate-report API v8] ---");
     console.log("Received request body:", JSON.stringify(req.body, null, 2));
 
+    // Vercel environment debugging logs for file system inspection
+    try {
+      const rootPath = process.cwd();
+      console.log(`[VERCEL_DEBUG] Current working directory (process.cwd()): ${rootPath}`);
+      const rootContents = fs.readdirSync(rootPath);
+      console.log(`[VERCEL_DEBUG] Contents of ${rootPath}:`, rootContents.join(', '));
+    } catch (e: any) {
+      console.error(`[VERCEL_DEBUG] Error listing directories: ${e.message}`);
+    }
+    // End of debugging logs
+
     const { corporation, address, documentType, surveyDate, surveyor } = req.body;
     const diagramSymbols = req.body.diagramSymbols as string[] | undefined;
     let { surveySubType } = req.body;
@@ -213,7 +224,8 @@ export default async function handler(
                 for (const symbolMapping of mappingArray) {
                     const { sheet: sheetName, image_path, cell, width, height } = symbolMapping;
                     const worksheet = workbook.getWorksheet(sheetName);
-                    const fullImagePath = path.join(process.cwd(), image_path);
+                    const vercelRootPath = process.cwd();
+                    const fullImagePath = path.join(vercelRootPath, image_path);
                     
                     // Vercel environment debugging logs
                     console.log(`[VERCEL_DEBUG] Checking for symbol image at path: ${fullImagePath}`);
