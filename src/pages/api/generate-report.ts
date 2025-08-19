@@ -147,10 +147,7 @@ export default async function handler(
     const photosRef = db.collection('photos');
     const q = photosRef
       .where('corporation', '==', corporation)
-      .where('documentType', '==', documentType)
-      .where('surveySubType', '==', surveySubType)
-      .where('surveyDate', '==', surveyDate)
-      .where('surveyor', '==', surveyor);
+      .where('surveyDate', '==', surveyDate);
     const querySnapshot = await q.get();
     const photosData = querySnapshot.docs.map(doc => doc.data());
     console.log(`[DEBUG] Fetched ${querySnapshot.docs.length} photos.`);
