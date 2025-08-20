@@ -1169,10 +1169,10 @@
         "height": 50
       }
     ],
-    "方方向ブースター": [
+    "片方向ブースター": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "src/pages/api/symbols/方方向ブースター.png",
+        "image_path": "src/pages/api/symbols/片方向ブースター.png",
         "cell": "C150",
         "width": 50,
         "height": 50
