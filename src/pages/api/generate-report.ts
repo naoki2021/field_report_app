@@ -213,24 +213,41 @@ export default async function handler(
             if (symbolMappings) {
                 const mappingArray = Array.isArray(symbolMappings) ? symbolMappings : [symbolMappings];
                 for (const symbolMapping of mappingArray) {
-                    const { sheet: sheetName, image_path, cell, width, height } = symbolMapping;
+                    const { sheet: sheetName, image_path: imageUrl, cell, width, height } = symbolMapping;
                     const worksheet = workbook.getWorksheet(sheetName);
-                    const fullImagePath = path.join(process.cwd(), image_path);
-                    if (worksheet && fs.existsSync(fullImagePath)) {
-                        console.log(`[DEBUG] Attempting to insert symbol: ${tag} into ${sheetName}!${cell}`);
+                    if (worksheet && imageUrl) {
+                        console.log(`[DEBUG] Attempting to insert symbol from URL: ${imageUrl} into ${sheetName}!${cell}`);
                         try {
-                            const imageBuffer = fs.readFileSync(fullImagePath);
-                            const arrayBuffer = imageBuffer.buffer.slice(imageBuffer.byteOffset, imageBuffer.byteOffset + imageBuffer.byteLength);
-                            const extension = path.extname(image_path).substring(1) as 'jpeg' | 'png' | 'gif';
-                            const imageId = workbook.addImage({ buffer: arrayBuffer, extension });
+                            const response = await fetch(imageUrl);
+                            if (!response.ok) {
+                                console.error(`[ERROR] Failed to fetch symbol image from ${imageUrl}: ${response.statusText}`);
+                                continue; // Skip to the next symbol
+                            }
+                            const imageArrayBuffer = await response.arrayBuffer();
+                            const contentType = response.headers.get('content-type');
+                            const extension = (contentType?.split('/')[1] || 'png') as 'jpeg' | 'png' | 'gif';
+                            
+                            const imageId = workbook.addImage({
+                                buffer: imageArrayBuffer,
+                                extension,
+                            });
+
                             worksheet.addImage(imageId, {
                                 tl: { col: Number(worksheet.getCell(cell).col) - 1, row: Number(worksheet.getCell(cell).row) - 1 },
                                 ext: { width, height },
                             });
                             console.log(`[DEBUG] Successfully inserted symbol: ${tag}`);
-                        } catch (e) { console.error(`[ERROR] Failed to insert symbol ${tag}:`, e); }
+                        } catch (e) {
+                            console.error(`[ERROR] Failed to insert symbol ${tag} from URL ${imageUrl}:`, e);
+                        }
+                    } else if (!worksheet) {
+                        console.warn(`[WARN] Worksheet '${sheetName}' not found for symbol '${tag}'.`);
+                    } else if (!imageUrl) {
+                        console.warn(`[WARN] No 'image_path' (URL) found for symbol '${tag}'.`);
                     }
                 }
+            } else {
+                console.warn(`[WARN] No mapping found for symbol tag: '${normalizedTag}'`);
             }
         }
     }

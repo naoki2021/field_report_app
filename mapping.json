@@ -756,14 +756,14 @@
     "１分岐器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/１分岐器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%91%E5%88%86%E5%B2%90%E5%99%A8_gdvxc6.png",
         "cell": "C10",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/１分岐器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%91%E5%88%86%E5%B2%90%E5%99%A8_gdvxc6.png",
         "cell": "C10",
         "width": 50,
         "height": 50
@@ -772,14 +772,14 @@
     "２分岐器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/２分岐器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%92%E5%88%86%E5%B2%90%E5%99%A8_on8nod.png",
         "cell": "C15",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/２分岐器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%92%E5%88%86%E5%B2%90%E5%99%A8_on8nod.png",
         "cell": "C15",
         "width": 50,
         "height": 50
@@ -788,14 +788,14 @@
     "２分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/２分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%92%E5%88%86%E9%85%8D%E5%99%A8_usqamr.png",
         "cell": "C20",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/２分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%92%E5%88%86%E9%85%8D%E5%99%A8_usqamr.png",
         "cell": "C20",
         "width": 50,
         "height": 50
@@ -804,14 +804,14 @@
     "３分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/３分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%93%E5%88%86%E9%85%8D%E5%99%A8_sm83kv.png",
         "cell": "C25",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/３分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%93%E5%88%86%E9%85%8D%E5%99%A8_sm83kv.png",
         "cell": "C25",
         "width": 50,
         "height": 50
@@ -820,14 +820,14 @@
     "４分岐器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/４分岐器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%94%E5%88%86%E5%B2%90%E5%99%A8_x0b8tm.png",
         "cell": "C30",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/４分岐器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%94%E5%88%86%E5%B2%90%E5%99%A8_x0b8tm.png",
         "cell": "C30",
         "width": 50,
         "height": 50
@@ -836,14 +836,14 @@
     "４分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/４分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%94%E5%88%86%E9%85%8D%E5%99%A8_n0qgsx.png",
         "cell": "C35",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/４分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%94%E5%88%86%E9%85%8D%E5%99%A8_n0qgsx.png",
         "cell": "C35",
         "width": 50,
         "height": 50
@@ -852,14 +852,14 @@
     "６分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/６分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%96%E5%88%86%E9%85%8D%E5%99%A8_bqmewk.png",
         "cell": "C40",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/６分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%96%E5%88%86%E9%85%8D%E5%99%A8_bqmewk.png",
         "cell": "C40",
         "width": 50,
         "height": 50
@@ -868,14 +868,14 @@
     "８分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/８分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%98%E5%88%86%E9%85%8D%E5%99%A8_w3kqwa.png",
         "cell": "C45",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/８分配器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%98%E5%88%86%E9%85%8D%E5%99%A8_w3kqwa.png",
         "cell": "C45",
         "width": 50,
         "height": 50
@@ -884,14 +884,14 @@
     "ATT": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/ATT.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/ATT_jzol29.png",
         "cell": "C50",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/ATT.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/ATT_jzol29.png",
         "cell": "C50",
         "width": 50,
         "height": 50
@@ -900,14 +900,14 @@
     "BSアンテナ": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/BSアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/BS%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_mtm5cs.png",
         "cell": "C55",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/BSアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/BS%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_mtm5cs.png",
         "cell": "C55",
         "width": 50,
         "height": 50
@@ -916,14 +916,14 @@
     "CSアンテナ": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/CSアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/CS%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_enrcm4.png",
         "cell": "C60",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/CSアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/CS%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_enrcm4.png",
         "cell": "C60",
         "width": 50,
         "height": 50
@@ -932,14 +932,14 @@
     "JCOM信号": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/JCOM信号.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/JCOM%E4%BF%A1%E5%8F%B7_neibbf.png",
         "cell": "C65",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/JCOM信号.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/JCOM%E4%BF%A1%E5%8F%B7_neibbf.png",
         "cell": "C65",
         "width": 50,
         "height": 50
@@ -948,14 +948,14 @@
     "JJ": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/JJ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/JJ_rcxrtu.png",
         "cell": "C70",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/JJ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/JJ_rcxrtu.png",
         "cell": "C70",
         "width": 50,
         "height": 50
@@ -964,14 +964,14 @@
     "JJダミー": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/JJダミー.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/JJ%E3%82%BF%E3%82%99%E3%83%9F%E3%83%BC_ct4njp.png",
         "cell": "C75",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/JJダミー.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/JJ%E3%82%BF%E3%82%99%E3%83%9F%E3%83%BC_ct4njp.png",
         "cell": "C75",
         "width": 50,
         "height": 50
@@ -980,14 +980,14 @@
     "SG挿入用TP": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/SG挿入用TP.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/SG%E6%8C%BF%E5%85%A5%E7%94%A8TP_kv0wug.png",
         "cell": "C90",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/SG挿入用TP.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/SG%E6%8C%BF%E5%85%A5%E7%94%A8TP_kv0wug.png",
         "cell": "C90",
         "width": 50,
         "height": 50
@@ -996,14 +996,14 @@
     "UHFアンテナ": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/UHFアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/UHF%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_u66qns.png",
         "cell": "C95",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/UHFアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/UHF%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_u66qns.png",
         "cell": "C95",
         "width": 50,
         "height": 50
@@ -1012,14 +1012,14 @@
     "VHFアンテナ": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/VHFアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/VHF%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_cr4pgv.png",
         "cell": "C100",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/VHFアンテナ.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622659/VHF%E3%82%A2%E3%83%B3%E3%83%86%E3%83%8A_cr4pgv.png",
         "cell": "C100",
         "width": 50,
         "height": 50
@@ -1028,14 +1028,14 @@
     "コンセント": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/コンセント.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622660/%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%B3%E3%83%88_jv6ozg.png",
         "cell": "C105",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/コンセント.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622660/%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%B3%E3%83%88_jv6ozg.png",
         "cell": "C105",
         "width": 50,
         "height": 50
@@ -1044,14 +1044,14 @@
     "スペアナ測定用TP": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/スペアナ測定用TP.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622660/%E3%82%B9%E3%83%98%E3%82%9A%E3%82%A2%E3%83%8A%E6%B8%AC%E5%AE%9A%E7%94%A8TP_frpive.png",
         "cell": "C110",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/スペアナ測定用TP.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622660/%E3%82%B9%E3%83%98%E3%82%9A%E3%82%A2%E3%83%8A%E6%B8%AC%E5%AE%9A%E7%94%A8TP_frpive.png",
         "cell": "C110",
         "width": 50,
         "height": 50
@@ -1060,14 +1060,14 @@
     "ダミー": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/ダミー.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622660/%E3%82%BF%E3%82%99%E3%83%9F%E3%83%BC_pcr1gz.png",
         "cell": "C115",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/ダミー.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622660/%E3%82%BF%E3%82%99%E3%83%9F%E3%83%BC_pcr1gz.png",
         "cell": "C115",
         "width": 50,
         "height": 50
@@ -1076,14 +1076,14 @@
     "引き込み柱": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/引き込み柱.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622661/%E5%BC%95%E3%81%8D%E8%BE%BC%E3%81%BF%E6%9F%B1_qt8thq.png",
         "cell": "C120",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/引き込み柱.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622661/%E5%BC%95%E3%81%8D%E8%BE%BC%E3%81%BF%E6%9F%B1_qt8thq.png",
         "cell": "C120",
         "width": 50,
         "height": 50
@@ -1092,14 +1092,14 @@
     "混合分波器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/混合分波器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E6%B7%B7%E5%90%88%E5%88%86%E6%B3%A2%E5%99%A8_shddnl.png",
         "cell": "C125",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/混合分波器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E6%B7%B7%E5%90%88%E5%88%86%E6%B3%A2%E5%99%A8_shddnl.png",
         "cell": "C125",
         "width": 50,
         "height": 50
@@ -1108,14 +1108,14 @@
     "双方向ブースター": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/双方向ブースター.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E5%8F%8C%E6%96%B9%E5%90%91%E3%83%95%E3%82%99%E3%83%BC%E3%82%B9%E3%82%BF%E3%83%BC_emypuy.png",
         "cell": "C130",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/双方向ブースター.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E5%8F%8C%E6%96%B9%E5%90%91%E3%83%95%E3%82%99%E3%83%BC%E3%82%B9%E3%82%BF%E3%83%BC_emypuy.png",
         "cell": "C130",
         "width": 50,
         "height": 50
@@ -1124,14 +1124,14 @@
     "電源BOX": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/電源BOX.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E9%9B%BB%E6%BA%90BOX_kxgy0z.png",
         "cell": "C135",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/電源BOX.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E9%9B%BB%E6%BA%90BOX_kxgy0z.png",
         "cell": "C135",
         "width": 50,
         "height": 50
@@ -1140,14 +1140,14 @@
     "電通ライン": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/電通ライン.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E9%9B%BB%E9%80%9A%E3%83%A9%E3%82%A4%E3%83%B3.png.png",
         "cell": "C140",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/電通ライン.png",
+        "image_path": "public/symbols/https://res.cloudinary.com/df2d5xszz/image/upload/v1755622662/%E9%9B%BB%E9%80%9A%E3%83%A9%E3%82%A4%E3%83%B3.png.png",
         "cell": "C140",
         "width": 50,
         "height": 50
@@ -1156,30 +1156,30 @@
     "保安器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/保安器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622663/%E4%BF%9D%E5%AE%89%E5%99%A8.png.png",
         "cell": "C145",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/保安器.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622663/%E4%BF%9D%E5%AE%89%E5%99%A8.png.png",
         "cell": "C145",
         "width": 50,
         "height": 50
       }
     ],
-    "方方向ブースター": [
+    "片方向ブースター": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "public/symbols/方方向ブースター.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622663/%E7%89%87%E6%96%B9%E5%90%91%E3%83%95%E3%82%99%E3%83%BC%E3%82%B9%E3%82%BF%E3%83%BC.png",
         "cell": "C150",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "public/symbols/方方向ブースター.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622663/%E7%89%87%E6%96%B9%E5%90%91%E3%83%95%E3%82%99%E3%83%BC%E3%82%B9%E3%82%BF%E3%83%BC.png",
         "cell": "C150",
         "width": 50,
         "height": 50
