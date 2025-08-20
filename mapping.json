@@ -1179,7 +1179,7 @@
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "src/pages/api/symbols/方方向ブースター.png",
+        "image_path": "src/pages/api/symbols/片方向ブースター.png",
         "cell": "C150",
         "width": 50,
         "height": 50
