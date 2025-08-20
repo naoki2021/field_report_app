@@ -753,129 +753,129 @@
     ]
   },
   "system_diagram_symbols": {
-    "１分岐器": [
+    "1分岐器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9１%E5%88%86%E5%B2%90%E5%99%A8_gdvxc6.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/1%E5%88%86%E5%B2%90%E5%99%A8_gdvxc6.png",
         "cell": "C10",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9１%E5%88%86%E5%B2%90%E5%99%A8_gdvxc6.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/1%E5%88%86%E5%B2%90%E5%99%A8_gdvxc6.png",
         "cell": "C10",
         "width": 50,
         "height": 50
       }
     ],
-    "２分岐器": [
+    "2分岐器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9２%E5%88%86%E5%B2%90%E5%99%A8_on8nod.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/2%E5%88%86%E5%B2%90%E5%99%A8_on8nod.png",
         "cell": "C15",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9２%E5%88%86%E5%B2%90%E5%99%A8_on8nod.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/2%E5%88%86%E5%B2%90%E5%99%A8_on8nod.png",
         "cell": "C15",
         "width": 50,
         "height": 50
       }
     ],
-    "２分配器": [
+    "2分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9２%E5%88%86%E9%85%8D%E5%99%A8_usqamr.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/2%E5%88%86%E9%85%8D%E5%99%A8_usqamr.png",
         "cell": "C20",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9２%E5%88%86%E9%85%8D%E5%99%A8_usqamr.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/2%E5%88%86%E9%85%8D%E5%99%A8_usqamr.png",
         "cell": "C20",
         "width": 50,
         "height": 50
       }
     ],
-    "３分配器": [
+    "3分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9３%E5%88%86%E9%85%8D%E5%99%A8_sm83kv.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/3%E5%88%86%E9%85%8D%E5%99%A8_sm83kv.png",
         "cell": "C25",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9３%E5%88%86%E9%85%8D%E5%99%A8_sm83kv.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/3%E5%88%86%E9%85%8D%E5%99%A8_sm83kv.png",
         "cell": "C25",
         "width": 50,
         "height": 50
       }
     ],
-    "４分岐器": [
+    "4分岐器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9４%E5%88%86%E5%B2%90%E5%99%A8_x0b8tm.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/4%E5%88%86%E5%B2%90%E5%99%A8_x0b8tm.png",
         "cell": "C30",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9４%E5%88%86%E5%B2%90%E5%99%A8_x0b8tm.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/4%E5%88%86%E5%B2%90%E5%99%A8_x0b8tm.png",
         "cell": "C30",
         "width": 50,
         "height": 50
       }
     ],
-    "４分配器": [
+    "4分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9４%E5%88%86%E9%85%8D%E5%99%A8_n0qgsx.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/4%E5%88%86%E9%85%8D%E5%99%A8_n0qgsx.png",
         "cell": "C35",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9４%E5%88%86%E9%85%8D%E5%99%A8_n0qgsx.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/4%E5%88%86%E9%85%8D%E5%99%A8_n0qgsx.png",
         "cell": "C35",
         "width": 50,
         "height": 50
       }
     ],
-    "６分配器": [
+    "6分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9６%E5%88%86%E9%85%8D%E5%99%A8_bqmewk.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/6%E5%88%86%E9%85%8D%E5%99%A8_bqmewk.png",
         "cell": "C40",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9６%E5%88%86%E9%85%8D%E5%99%A8_bqmewk.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/6%E5%88%86%E9%85%8D%E5%99%A8_bqmewk.png",
         "cell": "C40",
         "width": 50,
         "height": 50
       }
     ],
-    "８分配器": [
+    "8分配器": [
       {
         "sheet": "系統図（現状）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9８%E5%88%86%E9%85%8D%E5%99%A8_w3kqwa.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/8%E5%88%86%E9%85%8D%E5%99%A8_w3kqwa.png",
         "cell": "C45",
         "width": 50,
         "height": 50
       },
       {
         "sheet": "系統図（改修案）",
-        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/%EF%BC%9８%E5%88%86%E9%85%8D%E5%99%A8_w3kqwa.png",
+        "image_path": "https://res.cloudinary.com/df2d5xszz/image/upload/v1755622658/8%E5%88%86%E9%85%8D%E5%99%A8_w3kqwa.png",
         "cell": "C45",
         "width": 50,
         "height": 50
